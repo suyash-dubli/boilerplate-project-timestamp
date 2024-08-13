@@ -24,6 +24,24 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api",(req,res) =>{
+  res.json({unix:Date.now(),utc:new Date(Date.now()).toUTCString()});
+})
+
+app.get("/api/:date",(req,res)=>{
+  const date = req.params.date;
+  console.log(date);
+  
+  const newDateString = new Date(date).toUTCString();
+  const dateStringMilliToDate = new Date(parseInt(date)).toUTCString();
+  if(!isNaN(Date.parse(date))){
+    res.json({unix:Date.parse(date),utc:newDateString});
+  }else if(!isNaN(Number(date))){
+    res.json({unix:Number(date),utc:dateStringMilliToDate});
+  }else{
+    res.json({error:"Invalid Date"})
+  }
+})
 
 
 // Listen on port set in environment variable or default to 3000
